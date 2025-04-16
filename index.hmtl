@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Tracking</title>
+    <!-- Favicon -->
+    <link rel="icon" href="{{ url_for('static', filename='favicon.png') }}" type="image/png">
+</head>
+<body>
+    <h1>Отслеживание заказов</h1>
+
+    <form action="/add" method="POST">
+        <input type="text" name="order" placeholder="Новый заказ" required>
+        <button type="submit">Добавить</button>
+    </form>
+
+    <ul>
+        {% for order in orders %}
+            <li>
+                <strong>{{ order.name }}</strong> — <em>{{ order.status }}</em>
+
+                <!-- Форма обновления статуса -->
+                <form action="/update/{{ loop.index0 }}" method="POST" style="display:inline;">
+                    <select name="status">
+                        <option value="Cooking" {% if order.status == 'Cooking' %}selected{% endif %}>Готовится</option>
+                        <option value="Prepared" {% if order.status == 'Prepared' %}selected{% endif %}>Готов</option>
+                    </select>
+                    <button type="submit">Обновить</button>
+                </form>
+
+                <!-- Форма удаления заказа -->
+                <form action="/delete/{{ loop.index0 }}" method="POST" style="display:inline;">
+                    <button type="submit" style="color: red;">Удалить</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
